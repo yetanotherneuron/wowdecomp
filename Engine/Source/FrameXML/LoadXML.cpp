@@ -1069,7 +1069,7 @@ static int32_t VerifySignature(const uint8_t* data, uint32_t size, const uint8_t
 // VERIFY: 29422f35 manual
 // OFFSET: 0x008165E0
 int32_t FrameXML_CheckSignature(const char* tocFile, const char* extraFile, const uint8_t* modulus, uint8_t* digest) {
-#ifdef DISABLE_SIGNATURE_CHECKS
+#if defined(DISABLE_SIGNATURE_CHECKS) || defined(ALLOW_MODIFIED_INTERFACE)
     CalculateSignatureMD5(tocFile, extraFile, digest);
     return 3;
 #endif

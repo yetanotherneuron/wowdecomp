@@ -61,6 +61,12 @@ if (WOWDECOMP_DISABLE_SIGNATURE_CHECKS)
     add_compile_definitions(DISABLE_SIGNATURE_CHECKS=1)
 endif ()
 
+# Allow custom GlueXML, FrameXML, and add-on interface files without disabling MPQ authentication.
+option(WOWDECOMP_ALLOW_MODIFIED_INTERFACE "Allow modified or unsigned interface files" OFF)
+if (WOWDECOMP_ALLOW_MODIFIED_INTERFACE)
+    add_compile_definitions(ALLOW_MODIFIED_INTERFACE=1)
+endif ()
+
 # Third-party code is linked, not decompiled, for now.
 if (EXISTS ${CMAKE_SOURCE_DIR}/ThirdParty/CMakeLists.txt)
     add_subdirectory(ThirdParty)

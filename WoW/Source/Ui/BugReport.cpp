@@ -199,13 +199,19 @@ static void ReportBuild(FILE* file) {
     fprintf(file, "  compiled        %s %s\n", __DATE__, __TIME__);
 #ifdef DISABLE_SIGNATURE_CHECKS
     fprintf(file, "  signature check OFF (built with WOWDECOMP_DISABLE_SIGNATURE_CHECKS: modified MPQ files and interface files load)\n");
+#elif defined(ALLOW_MODIFIED_INTERFACE)
+    fprintf(file, "  interface signatures OFF (built with WOWDECOMP_ALLOW_MODIFIED_INTERFACE; MPQ authentication remains ON)\n");
 #else
     fprintf(file, "  signature check ON (stock behaviour: modified signed files are rejected)\n");
 #endif
 
     uint8_t digest[16];
     int32_t signature = FrameXML_CheckSignature("Interface\\FrameXML\\FrameXML.toc", "Interface\\FrameXML\\Bindings.xml", InterfaceKey, digest);
+#if defined(ALLOW_MODIFIED_INTERFACE) && !defined(DISABLE_SIGNATURE_CHECKS)
+    const char* signatureText = signature == 3 ? "not verified (modified interface allowed)" : signature == 2 ? "MODIFIED or corrupt" : signature == 1 ? "corrupt signature" : signature == 0 ? "MISSING signature" : "unknown";
+#else
     const char* signatureText = signature == 3 ? "valid" : signature == 2 ? "MODIFIED or corrupt" : signature == 1 ? "corrupt signature" : signature == 0 ? "MISSING signature" : "unknown";
+#endif
     fprintf(file, "  FrameXML sig    %s (%d)\n", signatureText, signature);
     fprintf(file, "  os              %s\n", os);
     fprintf(file, "  locale          %s\n", CVarString("locale"));

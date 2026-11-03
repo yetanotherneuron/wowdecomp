@@ -281,6 +281,12 @@ cmake -S . -B build/win32 -G "Visual Studio 17 2022" -A Win32
 cmake --build build/win32 --config Release --target <client target> --parallel
 ```
 
+For a modified login or game interface, use `Tools\Build-And-Deploy.ps1`. It builds the x64
+`WowClient` with modified interface files enabled, backs up the existing `WowClient64.exe` under
+`Backup\wowdecomp\`, then installs the build beside the game files. Pass `-GameDirectory` if the
+game is not in the folder above this source tree. Close the client before deploying and use only
+interface files you trust.
+
 The client targets and the project's CMake options are named in `CMakeLists.txt` and `Tools/`; the names below are described, not spelled out.
 
 In-source builds are refused, so keep the build directory separate (`build/` above).
@@ -303,6 +309,7 @@ Every option starts with the project's prefix (see `CMakeLists.txt`); only the p
 | CMake option | Default | Effect |
 |---|---|---|
 | `<prefix>_DISABLE_SIGNATURE_CHECKS` | `OFF` | Skip the MPQ file and `.toc.sig` signature checks, so modified game data and interface files load |
+| `<prefix>_ALLOW_MODIFIED_INTERFACE` | `OFF` | Allow modified or unsigned GlueXML, FrameXML, and add-on interface files while keeping MPQ authentication enabled |
 | `<prefix>_RETAIL_ASSETS` | `OFF` | Enable local CASC/CDN access and the first Retail model adapter; see [support boundaries and setup](docs/retail-casc.md) |
 | `<prefix>_EXTENDED_LIMITS` | `OFF` | Opt into custom player/container layouts; requires a matching server |
 | `<prefix>_QUEST_LOG_SLOTS` | `25` | Active quest ceiling, up to 1000 with extended limits |
