@@ -34,6 +34,7 @@ int32_t RealmConnection::HandleCharEnum(uint32_t msgId, uint32_t time, CDataStor
 
     uint8_t count;
     msg->Get(count);
+    const uint8_t declaredCount = count;
 
     int32_t invalid = 0;
 
@@ -121,6 +122,18 @@ int32_t RealmConnection::HandleCharEnum(uint32_t msgId, uint32_t time, CDataStor
     if (!success) {
         this->m_characterList.Clear();
     }
+
+    char details[160];
+    SStrPrintf(details, sizeof(details),
+        "success=%d characters=%u declared=%u read=%u size=%u remaining=%u invalidCount=%d",
+        success,
+        this->m_characterList.Count(),
+        declaredCount,
+        msg->m_read,
+        msg->m_size,
+        msg->m_read <= msg->m_size ? msg->m_size - msg->m_read : 0,
+        invalid);
+    this->m_realmResponse->GameServerResult(this, "SMSG_CHAR_ENUM parsed", details, nullptr);
 
     for (uint32_t i = 0; i < this->m_characterList.Count(); i++) {
         const CHARACTER_INFO& info = this->m_characterList[i];

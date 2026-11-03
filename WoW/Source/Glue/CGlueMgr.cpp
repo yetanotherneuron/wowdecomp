@@ -2199,7 +2199,12 @@ void CGlueMgr::StatusDialogClick() {
             break;
 
         case IDLE_ACCOUNT_LOGIN:
+            ClientServices::Connection()->Cancel(2);
+            CCharacterSelection::ClearCharacterList();
+            break;
+
         case IDLE_CHARACTER_LIST:
+            CGlueMgr::LogConnectionStatus("Character-list cancel requested by status dialog");
             ClientServices::Connection()->Cancel(2);
             CCharacterSelection::ClearCharacterList();
             break;
@@ -2591,6 +2596,7 @@ int32_t CGlueMgr::OnKickReasonMsg(void* param, NETMESSAGE msgId, uint32_t time, 
 
     if (!msg->IsRead()) {
         msg->Get(reason);
+        CGlueMgr::LogConnectionStatus("Server kick reason code=%u", reason);
 
         if (!msg->IsRead() && CGlueMgr::m_initialized && !CGlueMgr::m_suspended) {
             msg->GetArray(seed, sizeof(seed));

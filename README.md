@@ -287,6 +287,11 @@ For a modified login or game interface, use `Tools\Build-And-Deploy.ps1`. It bui
 game is not in the folder above this source tree. Close the client before deploying and use only
 interface files you trust.
 
+For login troubleshooting, the client writes connection stages, the character-list parser
+result (counts and unread-byte totals, not packet contents), status-dialog cancellation, and
+the server-reported kick reason code to `Logs\connection.log`. This does not log or decode
+anti-cheat scan data.
+
 The client targets and the project's CMake options are named in `CMakeLists.txt` and `Tools/`; the names below are described, not spelled out.
 
 In-source builds are refused, so keep the build directory separate (`build/` above).

@@ -1439,6 +1439,14 @@ void ClientConnection::RequestCharacterDelete(WOWGUID guid) {
 // VERIFY: 0fdcb75a auto
 // OFFSET: 0x006B1B80
 void ClientRealmResponseAdapter::GameServerResult(RealmConnection* connection, const char* message1, const char* message2, const char* message3) {
+    char details[256];
+    SStrPrintf(details, sizeof(details), "Game server: %s%s%s%s%s",
+        message1 ? message1 : "",
+        message1 && message2 ? ": " : "",
+        message2 ? message2 : "",
+        message2 && message3 ? " " : "",
+        message3 ? message3 : "");
+    CGlueMgr::LogConnectionStatus("%s", details);
 }
 
 // VERIFY: 13314496 auto
